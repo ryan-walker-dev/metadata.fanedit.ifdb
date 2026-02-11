@@ -18,7 +18,7 @@
 
       <!--Normal Search-->
       <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;https:\/\/fanedit.org\1&lt;/url&gt;&lt;/entity&gt;" dest="5">
-        <expression noclean="1" repeat="yes" >&lt;a href=&quot;(\/[^&quot;\/]*\/)&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;</expression>
+        <expression noclean="1" repeat="yes" >&lt;a href=&quot;(\/[^&quot;]+\/)&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;</expression>
       </RegExp>
 
       <!--For if we get a direct match and redirected straight to movie page-->
@@ -46,7 +46,7 @@
 
       <!--Plot-->
       <RegExp input="$$1" output="&lt;plot&gt;\1&lt;/plot&gt;" dest="2">
-        <expression fixchars="1" trim="1">&lt;section[^&gt;]*&gt;[\s]*&lt;h2[^&gt;]*&gt;Synopsis&lt;\/h2&gt;[\s]*&lt;p[^&gt;]*&gt;([^&lt;]*)&lt;\/p&gt;</expression>
+        <expression fixchars="1" trim="1">&lt;section[^&gt;]*&gt;[\s]*&lt;h2[^&gt;]*&gt;Synopsis&lt;\/h2&gt;[\s]*&lt;p[^&gt;]*&gt;(.*?)&lt;\/p&gt;</expression>
       </RegExp>
 
       <!--Genres-->
@@ -54,7 +54,7 @@
         <RegExp input="$$1" output="\1" dest="5">
           <expression noclean="1">&lt;li&gt;&lt;strong&gt;Genre:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
         </RegExp>
-        <expression noclean="1" repeat="yes">([A-Za-z\s]+)(?:,|$)</expression>
+        <expression noclean="1" repeat="yes">([A-Za-z\s\-/]+)(?:,|$)</expression>
       </RegExp>
 
       <!--Genre-->
@@ -87,7 +87,7 @@
         <RegExp input="$$1" output="\1" dest="5">
           <expression noclean="1">&lt;li&gt;&lt;strong&gt;Faneditor Name:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
         </RegExp>
-        <expression noclean="1" repeat="yes">([A-Za-z0-9\s\-&apos;]+)(?:,|$)</expression>
+        <expression noclean="1" repeat="yes">([A-Za-z0-9\s\-'&apos;]+)(?:,|$)</expression>
       </RegExp>
 
       <!--Director-->
