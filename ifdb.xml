@@ -17,21 +17,21 @@
     <RegExp input="$$5" output="&lt;results&gt;\1&lt;/results&gt;" dest="8">
 
       <!--Normal Search-->
-      <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;https:\/\/fanedit.org/?p=\1&lt;/url&gt;&lt;/entity&gt;" dest="5">
-        <expression noclean="1" repeat="yes" >id=&quot;jr-listing-title-([0-9]*)&quot;[\s]*&gt;(.[^&lt;]*)&lt;\/a&gt;</expression>
+      <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;https:\/\/fanedit.org\1&lt;/url&gt;&lt;/entity&gt;" dest="5">
+        <expression noclean="1" repeat="yes" >&lt;a href=&quot;(\/[^&quot;\/]*\/)&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;</expression>
       </RegExp>
 
       <!--For if we get a direct match and redirected straight to movie page-->
       <RegExp input="$$3" output="&lt;entity&gt;\1&lt;/entity&gt;" dest="5+">
 
-        <!--Fanedit Id-->
-        <RegExp input="$$1" output="&lt;url&gt;https:\/\/fanedit.org/?p=\1&lt;/url&gt;" dest="3">
-          <expression noclean="1">data-listingid=&quot;listing(\d+)&quot;</expression>
+        <!--URL from current page-->
+        <RegExp input="$$1" output="&lt;url&gt;\1&lt;/url&gt;" dest="3">
+          <expression noclean="1">&lt;link rel=&quot;canonical&quot; href=&quot;([^&quot;]+)&quot;</expression>
         </RegExp>
 
         <!--Title-->
         <RegExp input="$$1" output="&lt;title&gt;\1&lt;/title&gt;" dest="3+">
-          <expression noclean="1">&lt;span itemprop=&quot;headline&quot;&gt;(.*)&lt;/span&gt;</expression>
+          <expression noclean="1">&lt;h1[^&gt;]*&gt;([^&lt;]+)&lt;\/h1&gt;</expression>
         </RegExp>
 
         <expression noclean="1" />
@@ -46,63 +46,63 @@
 
       <!--Plot-->
       <RegExp input="$$1" output="&lt;plot&gt;\1&lt;/plot&gt;" dest="2">
-        <expression fixchars="1" trim="1">&lt;div class=&quot;jrFieldRow jrBriefsynopsis&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Brief Synopsis:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;(.*)&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;jrFieldRow jrIntention</expression>
+        <expression fixchars="1" trim="1">&lt;section[^&gt;]*&gt;[\s]*&lt;h2[^&gt;]*&gt;Synopsis&lt;\/h2&gt;[\s]*&lt;p[^&gt;]*&gt;([^&lt;]*)&lt;\/p&gt;</expression>
       </RegExp>
 
       <!--Genres-->
       <RegExp input="$$5" output="&lt;genre&gt;\1&lt;/genre&gt;" dest="2+">
         <RegExp input="$$1" output="\1" dest="5">
-          <expression noclean="1">&lt;div class=&quot;jrFieldRow jrGenre&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Genre:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;&lt;ul class=&quot;jrFieldValueList&quot;&gt;(.*)&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;</expression>
+          <expression noclean="1">&lt;li&gt;&lt;strong&gt;Genre:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
         </RegExp>
-        <expression noclean="1" repeat="yes">&lt;li&gt;&lt;a href=&quot;https://fanedit.org/fanedit-search/tag/genre/[a-zA-Z\-]*/\?criteria=[0-9]*&quot;&gt;([a-zA-Z\s]*)&lt;/a&gt;&lt;/li&gt;</expression>
+        <expression noclean="1" repeat="yes">([A-Za-z\s]+)(?:,|$)</expression>
       </RegExp>
 
       <!--Genre-->
       <RegExp input="$$1" output="&lt;genre&gt;\1&lt;/genre&gt;" dest="2+">
-        <expression noclean="1">&lt;div class=&quot;jrFieldRow jrGenre&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Genre:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;&lt;a href=&quot;https://fanedit.org/fanedit-search/tag/genre/[a-zA-Z\-]*/\?criteria=[0-9]*&quot;>([a-zA-Z\s]*)&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;</expression>
+        <expression noclean="1">&lt;li&gt;&lt;strong&gt;Genre:&lt;\/strong&gt;[\s]*([^&lt;,]+)</expression>
       </RegExp>
 
       <!--Votes-->
-      <RegExp input="$$1" output="&lt;votes&gt;\3&lt;/votes&gt;" dest="2+">
-        <expression noclean="1">(&lt;span class=&quot;jrRatingValue&quot;&gt;[\d.\s]+&lt;span class=&quot;rating_count&quot;&gt;)?(&lt;span class=&quot;jrReviewCount&quot;&gt; )?\(&lt;span class=&quot;count&quot;>([0-9]*)&lt;/span&gt;\)&lt;/span&gt;</expression>
+      <RegExp input="$$1" output="&lt;votes&gt;\1&lt;/votes&gt;" dest="2+">
+        <expression noclean="1">&lt;span[^&gt;]*&gt;\(([0-9]+)[\s]*votes?\)&lt;\/span&gt;</expression>
       </RegExp>
 
       <!--Rating-->
-      <RegExp input="$$1" output="&lt;rating&gt;\2&lt;/rating&gt;" dest="2+">
-        <expression noclean="1">&lt;span class=&quot;jrRatingValue&quot;&gt;(&lt;span&gt;)?([\d.]+)</expression>
+      <RegExp input="$$1" output="&lt;rating&gt;\1&lt;/rating&gt;" dest="2+">
+        <expression noclean="1">&lt;span[^&gt;]*&gt;Rating:[\s]*([\d.]+)[\s]*\/[\s]*10</expression>
       </RegExp>
 
       <!--Thumbnail-->
       <RegExp input="$$1" output="&lt;thumb&gt;\1&lt;/thumb&gt;" dest="2+">
-        <expression noclean="1">&lt;div[\s]*class=&quot;jrListingMainImage&quot;[\s]*style=&quot;.*&quot;&gt;[\s]*&lt;a href=&quot;.*&quot;[\s]*class=&quot;fancybox&quot;[\s]*rel=&quot;gallery&quot;[\s]*title=&quot;.*&quot;[\s]*&gt;&lt;img src=&quot;(.*)&quot;[\s]*alt=&quot;.*&quot;[\s]*title=&quot;.*&quot;[\s]*class=&quot;jrMediaPhoto&quot;[\s]*\/&gt;&lt;\/a&gt;[\s]*&lt;\/div&gt;</expression>
+        <expression noclean="1">&lt;img[^&gt;]*class=&quot;[^&quot;]*wp-post-image[^&quot;]*&quot;[^&gt;]*src=&quot;([^&quot;]+)&quot;</expression>
       </RegExp>
 
       <!--Tagline-->
       <RegExp input="$$1" output="&lt;tagline&gt;\1&lt;/tagline&gt;" dest="2+">
-        <expression fixchars="1" trim="1">&lt;div class=&quot;jrFieldRow jrTagline&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Tagline:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;(.*)&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;jrFieldRow jrOriginalmovietitle</expression>
+        <expression fixchars="1" trim="1">&lt;li&gt;&lt;strong&gt;Tagline:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
       </RegExp>
 
       <!--Directors-->
       <RegExp input="$$5" output="&lt;director&gt;\1&lt;/director&gt;" dest="2+">
         <RegExp input="$$1" output="\1" dest="5">
-          <expression noclean="1">&lt;div class=&quot;jrFieldRow jrFaneditorname&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Faneditor Name:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;&lt;ul class=&quot;jrFieldValueList&quot;&gt;(.*)&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;</expression>
+          <expression noclean="1">&lt;li&gt;&lt;strong&gt;Faneditor Name:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
         </RegExp>
-        <expression noclean="1" repeat="yes">&lt;li&gt;&lt;a href=&quot;https://fanedit.org/fanedit-search/tag/faneditorname/[a-z0-9\-]*/\?criteria=[0-9]*&quot;&gt;([a-zA-Z0-9\s\-&apos;]*)&lt;/a&gt;&lt;/li&gt;</expression>
+        <expression noclean="1" repeat="yes">([A-Za-z0-9\s\-&apos;]+)(?:,|$)</expression>
       </RegExp>
 
       <!--Director-->
       <RegExp input="$$1" output="&lt;director&gt;\1&lt;/director&gt;" dest="2+">
-        <expression noclean="1">&lt;div class=&quot;jrFieldRow jrFaneditorname&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Faneditor Name:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;&lt;a href=&quot;https:\/\/fanedit.org/fanedit-search/tag/faneditorname/[a-z0-9\-]*/\?criteria=[0-9]*&quot;&gt;([a-zA-Z0-9\s\-&apos;]*)&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;</expression>
+        <expression noclean="1">&lt;li&gt;&lt;strong&gt;Faneditor Name:&lt;\/strong&gt;[\s]*([^&lt;,]+)</expression>
       </RegExp>
 
       <!--Year-->
       <RegExp input="$$1" output="&lt;year&gt;\1&lt;/year&gt;" dest="2+">
-        <expression noclean="1">&lt;div class=&quot;jrFieldRow jrFaneditreleasedate&quot;&gt;&lt;div class=&quot;jrFieldLabel&quot;&gt;Fanedit Release Date:&lt;/div&gt;&lt;div class=&quot;jrFieldValue &quot;&gt;&lt;a href=&quot;.*&quot;&gt;[a-zA-Z]*[\s]*([0-9]{4})&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;</expression>
+        <expression noclean="1">&lt;li&gt;&lt;strong&gt;Fanedit Release Date:&lt;\/strong&gt;[\s]*[A-Za-z]*[\s]*([0-9]{4})</expression>
       </RegExp>
 
       <!--Title-->
       <RegExp input="$$1" output="&lt;title&gt;\1&lt;/title&gt;" dest="2+">
-        <expression noclean="1">&lt;span itemprop=&quot;headline&quot;&gt;(.*)&lt;\/span&gt;</expression>
+        <expression noclean="1">&lt;h1[^&gt;]*&gt;([^&lt;]+)&lt;\/h1&gt;</expression>
       </RegExp>
 
       <expression noclean="1" />
