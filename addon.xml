@@ -4,7 +4,7 @@
        version="1.2.4"
        provider-name="TomFin46">
   <requires>
-    <import addon="xbmc.metadata" version="1.0"/>
+    <import addon="xbmc.metadata" version="2.1.0"/>
   </requires>
   <extension point="xbmc.metadata.scraper.movies"
              language="en"
