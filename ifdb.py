@@ -63,16 +63,14 @@ def search_movie(title, year, handle):
     if year:
         search_query = f"{title} {year}"
     
-    # URL encode the query
-    encoded_query = urllib.parse.quote(search_query)
-    
-    # Build API URL
-    api_url = (
-        f"https://www.googleapis.com/customsearch/v1"
-        f"?key={api_key}"
-        f"&cx={search_engine_id}"
-        f"&q={encoded_query}"
-    )
+    # Build API URL with proper parameter encoding
+    base_url = "https://www.googleapis.com/customsearch/v1"
+    params = {
+        'key': api_key,
+        'cx': search_engine_id,
+        'q': search_query
+    }
+    api_url = f"{base_url}?{urllib.parse.urlencode(params)}"
     
     log(f"API URL: {api_url}", xbmc.LOGDEBUG)
     
