@@ -38,10 +38,12 @@ def test_google_search(query="Mr White Part II"):
                 
                 if fanedit_urls:
                     print(f"   Found {len(fanedit_urls)} fanedit.org URLs")
-                    for i, url in enumerate(fanedit_urls[:3], 1):
-                        title = data['items'][i-1].get('title', 'N/A')
-                        print(f"   {i}. {title}")
-                        print(f"      {url}")
+                    for i, item in enumerate(data['items'][:3], 1):
+                        if 'fanedit.org' in item.get('link', ''):
+                            title = item.get('title', 'N/A')
+                            url = item.get('link', '')
+                            print(f"   {i}. {title}")
+                            print(f"      {url}")
                     return True
                 else:
                     print("⚠️  WARNING: No fanedit.org results found in API response")
@@ -58,7 +60,7 @@ def test_google_search(query="Mr White Part II"):
             error_data = json.loads(e.read().decode('utf-8'))
             if 'error' in error_data:
                 print(f"   API Error: {error_data['error'].get('message', 'Unknown error')}")
-        except:
+        except (json.JSONDecodeError, UnicodeDecodeError):
             pass
         return False
     except Exception as e:

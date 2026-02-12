@@ -21,7 +21,7 @@ This scraper uses the Google Custom Search API to find fanedits. The API credent
 - **Search Engine ID**: Configured to search fanedit.org
 - **Search Engine URL**: https://cse.google.com/cse?cx=c4204d1b86cc34a32
 
-The free tier limit is 100 queries per day, which is sufficient for typical usage. If you need more queries, you can create your own Google Custom Search API credentials and modify the `ifdb.xml` file.
+**Note**: The API key is intentionally included in the scraper for convenience. The free tier limit is 100 queries per day, which is sufficient for typical usage. If you need more queries or want to use your own credentials, you can create your own Google Custom Search API credentials and modify the `ifdb.xml` file (line 5).
 
 ### Testing:
 ```bash
