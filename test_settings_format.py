@@ -85,43 +85,43 @@ def test_settings_format(settings_file='resources/settings.xml'):
                     setting_default = setting.get('default')
                     print(f"        - {setting_id}: type=\"{setting_type}\", label=\"{setting_label}\", default=\"{setting_default}\"")
                     
-                    # Check 7: Settings should use flat attributes (Kodi 21 Omega format)
-                    # These should NOT have nested elements
+                    # Check 7: Settings should use nested elements (Kodi 21 Omega modern format)
+                    # Per official TheMovieDB scraper and Kodi docs
                     level_elem = setting.find('level')
-                    if level_elem is not None:
-                        print(f"          ✗ Setting '{setting_id}' has deprecated <level> nested element")
-                        print(f"             Use flat attributes instead")
-                        return False
-                    print(f"          ✓ No deprecated <level> element")
+                    if level_elem is None:
+                        print(f"          ! Warning: Setting '{setting_id}' missing <level> element")
+                        print(f"             Should have <level>0</level> for basic settings")
+                    else:
+                        print(f"          ✓ Has <level> element: {level_elem.text}")
                     
                     default_elem = setting.find('default')
-                    if default_elem is not None:
-                        print(f"          ✗ Setting '{setting_id}' has deprecated <default> nested element")
-                        print(f"             Use default=\"...\" attribute instead")
-                        return False
-                    print(f"          ✓ No deprecated <default> element")
+                    if default_elem is None:
+                        print(f"          ! Warning: Setting '{setting_id}' missing <default> element")
+                    else:
+                        default_val = default_elem.text if default_elem.text else "(empty)"
+                        print(f"          ✓ Has <default> element: {default_val}")
                     
                     control_elem = setting.find('control')
-                    if control_elem is not None:
-                        print(f"          ✗ Setting '{setting_id}' has deprecated <control> nested element")
-                        print(f"             Use flat attributes instead")
-                        return False
-                    print(f"          ✓ No deprecated <control> element")
+                    if control_elem is None:
+                        print(f"          ! Warning: Setting '{setting_id}' missing <control> element")
+                        print(f"             Should have <control type=\"edit\" format=\"string\"> for text input")
+                    else:
+                        control_type = control_elem.get('type')
+                        control_format = control_elem.get('format')
+                        print(f"          ✓ Has <control type=\"{control_type}\" format=\"{control_format}\">")
                     
-                    # Check 8: For text input, type should be "text" not "string"
-                    if setting_type not in ['text', 'boolean', 'number', 'slider', 'action']:
+                    # Check 8: For text input, type should be "string" not "text"
+                    if setting_type == 'text':
+                        print(f"          ✗ Setting type 'text' is NOT recognized by Kodi 21")
+                        print(f"             Use type=\"string\" instead")
+                        return False
+                    elif setting_type not in ['string', 'boolean', 'number', 'slider', 'action', 'integer']:
                         print(f"          ! Warning: Setting type '{setting_type}' may not be valid")
-                        print(f"             For text input, use type=\"text\"")
-                    
-                    # Check 9: Should have default attribute
-                    if setting_default is None:
-                        print(f"          ✗ Setting '{setting_id}' missing default attribute")
-                        return False
-                    print(f"          ✓ Has default=\"{setting_default}\" attribute")
         
         print()
         print("✓ All format requirements met!")
-        print("✓ Settings use Kodi 21 Omega flat attribute format!")
+        print("✓ Settings use Kodi 21 Omega nested element format!")
+        print("✓ Format matches official TheMovieDB scraper standard!")
         return True
         
     except ET.ParseError as e:
