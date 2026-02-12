@@ -6,6 +6,9 @@ Test script to validate settings.xml format for Kodi 21 compatibility
 import xml.etree.ElementTree as ET
 import sys
 
+# Valid setting types for Kodi add-ons
+VALID_SETTING_TYPES = ['string', 'text', 'boolean', 'number', 'slider', 'action', 'enum']
+
 def test_settings_format(settings_file='resources/settings.xml'):
     """Test that settings.xml follows Kodi 21 format requirements"""
     
@@ -110,7 +113,7 @@ def test_settings_format(settings_file='resources/settings.xml'):
                         print(f"          ✓ No deprecated <control> element")
                     
                     # Check 8: For text input, type should be "string" 
-                    if setting_type not in ['string', 'text', 'boolean', 'number', 'slider', 'action', 'enum']:
+                    if setting_type not in VALID_SETTING_TYPES:
                         print(f"          ! Warning: Setting type '{setting_type}' may not be valid")
                     
                     # Check 9: Should have default attribute
