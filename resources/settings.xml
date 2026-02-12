@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting id="api_key" type="text" label="30001" default="" />
+        <setting id="search_engine_id" type="text" label="30002" default="" />
+    </category>
+</settings>
