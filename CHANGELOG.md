@@ -1,5 +1,33 @@
 # Changelog
 
+## Version 2.0.3 - Settings Type Fix (2026-02-12)
+
+### Bug Fix
+
+**Problem:** Settings page not loading in Kodi 21.3 (Omega) with errors:
+```
+error <CSettingGroup>: unknown setting type "text" of "api_key"
+error <CSettingGroup>: unable to create new setting "api_key"
+error <CSettingGroup>: unknown setting type "text" of "search_engine_id"
+error <CSettingGroup>: unable to create new setting "search_engine_id"
+```
+
+**Root Cause:** Kodi 21 Omega does not recognize `type="text"` as a valid setting type. The previous fix (version 2.0.2) incorrectly changed from `type="string"` to `type="text"` based on misinterpretation of the error messages.
+
+**Actual Fix:** Use `type="string"` with nested child elements following the official TheMovieDB scraper format:
+- Use `type="string"` (not `type="text"`)
+- Use nested `<level>`, `<default>`, `<control>` child elements
+- Use `<control type="edit" format="string">` for text input fields
+- Use `<constraints><allowempty>true</allowempty></constraints>` to allow empty values
+
+**Files Modified:**
+- `resources/settings.xml`: Complete restructure to use nested element format (lines 6-25)
+- `addon.xml`: Version bump to 2.0.3
+
+**Reference:** Official Kodi TheMovieDB scraper settings.xml (https://github.com/xbmc/metadata.themoviedb.org.python/blob/master/resources/settings.xml) confirms this is the correct format for text input in Kodi 21 scrapers.
+
+---
+
 ## Version 2.0.2 - Settings Format Fix (2026-02-12)
 
 ### Bug Fix
