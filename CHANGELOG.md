@@ -1,4 +1,94 @@
-# Version 1.2.2 - Fix Summary
+# Changelog
+
+## Version 2.0.0 - Python Scraper Conversion (2026-02-12)
+
+### Major Changes
+
+**BREAKING CHANGE:** Converted from XML scraper to Python scraper for full Kodi 21 Omega compatibility.
+
+### Why This Change Was Necessary
+
+**Problem:** Settings page not showing in Kodi 21.3 (Omega)
+
+**Root Cause:** 
+- Kodi 21 (Omega) officially deprecated XML-based scrapers
+- XML scrapers have limited UI integration in Kodi 21, causing settings pages to not appear
+- Python scrapers are now the only officially supported and maintained scraper type
+
+**Solution:** Complete conversion from XML to Python-based scraper
+
+### What Changed
+
+#### 1. New Python Scraper (ifdb.py)
+- Complete Python implementation of the IFDB scraper
+- Uses Kodi's Python API (xbmc, xbmcaddon, xbmcgui, xbmcplugin)
+- Implements search and detail retrieval functionality
+- Better error handling with user-friendly notifications
+- Proper logging for debugging
+
+#### 2. Updated addon.xml
+- Added `xbmc.python` version 3.0.0 dependency
+- Changed library from `ifdb.xml` to `ifdb.py`
+- Updated version to 2.0.0
+- Updated description to note Python-based implementation
+
+#### 3. Settings Compatibility
+- Existing settings.xml format remains unchanged (already compatible)
+- Settings page now works properly in Kodi 21+
+- API credentials can be configured as before
+
+#### 4. Documentation Updates
+- Updated README.md with Python scraper information
+- Clarified Kodi 21+ requirement
+- Updated troubleshooting guide
+
+### Features Implemented
+
+✅ **Search Functionality:**
+- Uses Google Custom Search API to find fanedits
+- Proper URL encoding and error handling
+- Filters results to fanedit.org only
+
+✅ **Metadata Extraction:**
+- Title, Year, Plot/Synopsis
+- Genres (multiple)
+- Directors/Faneditors (multiple)
+- Rating and Vote Count
+- Tagline
+- Poster/Thumbnail
+
+✅ **Error Handling:**
+- User-friendly error notifications
+- Detailed logging for troubleshooting
+- API credential validation
+
+### Compatibility
+
+- **Kodi 21 (Omega) and later:** ✅ Fully supported
+- **Kodi 19/20 (Matrix/Nexus):** ❌ Not supported (use version 1.x)
+- **Kodi 17/18 (Krypton/Leia):** ❌ Not supported (use version 1.x)
+
+### Migration Guide
+
+**For Kodi 21+ users:**
+1. Update to version 2.0.0
+2. Settings and API credentials will be preserved
+3. No additional configuration needed
+
+**For Kodi 19/20 users:**
+- Stay on version 1.x (XML scraper)
+- Or upgrade to Kodi 21+ to use version 2.0.0
+
+### Technical Details
+
+- Uses Python 3 standard library (urllib, json, re)
+- No external dependencies required
+- Compatible with Kodi's Python 3.11 environment
+- Follows Kodi's Python scraper API conventions
+
+---
+
+## Version 1.2.2 - Fix Summary
 
 ## Issues Resolved
 

@@ -1,17 +1,17 @@
 # metadata.fanedit.ifdb
 Kodi Movie Information Scraper for the Internet Fanedit Database using Google Custom Search API
 
-**Current Version: 1.2.2** - Settings page fixed for Kodi 21+ compatibility
+**Current Version: 2.0.0** - Converted to Python scraper for full Kodi 21+ compatibility
 
 Metadata agent for scraping information from the Internet Fanedit Database (IFDB) at https://fanedit.org/
 
-## Recent Updates (v1.2.2)
+## Recent Updates (v2.0.0)
 
-- ✅ Fixed blank settings page issue for Kodi 21+
-- ✅ Updated settings format to version 1 (Kodi 19+ requirement)
-- ✅ Added proper section/category/group structure for settings
-- ✅ Added help text for settings fields
-- ✅ Improved compatibility with modern Kodi versions (21 Omega tested)
+- ✅ **Converted from XML to Python scraper** - Required for Kodi 21 Omega compatibility
+- ✅ Settings page now works properly in Kodi 21+
+- ✅ Full support for modern Kodi versions (21 Omega and later)
+- ✅ Improved error handling and user feedback
+- ✅ Uses Python 3 for better reliability and maintainability
 
 See [TESTING.md](TESTING.md) for detailed testing instructions and troubleshooting.
 
@@ -65,10 +65,9 @@ After installing the addon in Kodi:
 - If you need more, you may need to enable billing on your Google Cloud project
 
 ## Requirements
-- Kodi 19+ (Matrix or later) - **Required for settings to display correctly**
-  - Kodi 21 (Omega) - Fully supported and tested
-  - Kodi 19/20 (Matrix/Nexus) - Compatible with new settings format
-  - Kodi 17/18 (Krypton/Leia) - Not supported (uses old settings format)
+- Kodi 21+ (Omega or later) - **Required for Python scraper support**
+  - Kodi 21 (Omega) - Fully supported
+  - Kodi 19/20 (Matrix/Nexus) - Not supported (use XML scraper version 1.x)
 - Internet connection
 - Google Custom Search API credentials (see Configuration section)
 
@@ -76,9 +75,9 @@ After installing the addon in Kodi:
 
 If you experience issues:
 
-1. **Settings page is blank**: 
-   - **Kodi 21/20/19 users**: This has been fixed in version 1.2.2. Update to the latest version.
-   - **Kodi 17/18 users**: These versions use the old settings format and are no longer supported. Please upgrade to Kodi 19 or later.
+1. **Settings page is not showing (Kodi 21+)**: 
+   - Update to version 2.0.0 or later, which uses a Python scraper required by Kodi 21
+   - Older XML-based versions (1.x) are not fully compatible with Kodi 21
    
 2. **Connection errors**: Verify your API credentials are correct and you haven't exceeded the 100 queries/day limit.
 
@@ -87,5 +86,7 @@ If you experience issues:
 For detailed testing and troubleshooting instructions, see [TESTING.md](TESTING.md).
 
 ## Notes
+- Version 2.0.0 and later requires Kodi 21 (Omega) or newer
+- For Kodi 19/20, use version 1.x (XML scraper)
 - If fanedit.org decides to block scraping or the format changes, this scraper will stop working
 - API credentials are required for the scraper to function
