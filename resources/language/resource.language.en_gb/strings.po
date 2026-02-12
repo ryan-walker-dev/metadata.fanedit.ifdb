@@ -1,4 +1,21 @@
-# Addon Metadata
+# Kodi Media Center language file
+# Addon Name: IFDB
+# Addon id: metadata.fanedit.ifdb
+# Addon Provider: TomFin46
+msgid ""
+msgstr ""
+"Project-Id-Version: metadata.fanedit.ifdb\n"
+"Report-Msgid-Bugs-To: https://github.com/ryan-walker-dev/metadata.fanedit.ifdb\n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: 2024-01-01 12:00+0000\n"
+"Last-Translator: TomFin46\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 msgctxt "Addon Settings"
 msgid "30000"
 msgstr "API Settings"
