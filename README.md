@@ -1,7 +1,19 @@
 # metadata.fanedit.ifdb
 Kodi Movie Information Scraper for the Internet Fanedit Database using Google Custom Search API
 
+**Current Version: 1.2.2** - Settings page fixed, improved compatibility with Kodi 17+
+
 Metadata agent for scraping information from the Internet Fanedit Database (IFDB) at https://fanedit.org/
+
+## Recent Updates (v1.2.2)
+
+- ✅ Fixed blank settings page issue
+- ✅ Updated settings format for better Kodi compatibility (17+)
+- ✅ Added proper language file headers
+- ✅ Removed XML parsing issues
+- ✅ Improved error handling
+
+See [TESTING.md](TESTING.md) for detailed testing instructions and troubleshooting.
 
 ## Features
 - Uses Google Custom Search API to find fanedits (bypasses direct site search issues)
@@ -56,6 +68,16 @@ After installing the addon in Kodi:
 - Kodi 17+ (Krypton or later)
 - Internet connection
 - Google Custom Search API credentials (see Configuration section)
+
+## Troubleshooting
+
+If you experience issues:
+
+1. **Settings page is blank**: Make sure you're using Kodi 17 or later. See [TESTING.md](TESTING.md) for detailed troubleshooting.
+2. **Connection errors**: Verify your API credentials are correct and you haven't exceeded the 100 queries/day limit.
+3. **No search results**: Check that your Custom Search Engine is configured for `fanedit.org/*` only.
+
+For detailed testing and troubleshooting instructions, see [TESTING.md](TESTING.md).
 
 ## Notes
 - If fanedit.org decides to block scraping or the format changes, this scraper will stop working
