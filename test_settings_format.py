@@ -82,43 +82,46 @@ def test_settings_format(settings_file='resources/settings.xml'):
                     setting_id = setting.get('id')
                     setting_type = setting.get('type')
                     setting_label = setting.get('label')
-                    print(f"        - {setting_id}: type=\"{setting_type}\", label=\"{setting_label}\"")
+                    setting_default = setting.get('default')
+                    print(f"        - {setting_id}: type=\"{setting_type}\", label=\"{setting_label}\", default=\"{setting_default}\"")
                     
-                    # Check 7: For Kodi 21, settings should have nested elements
-                    # Check for <level> element
+                    # Check 7: Settings should use flat attributes (Kodi 21 Omega format)
+                    # These should NOT have nested elements
                     level_elem = setting.find('level')
-                    if level_elem is None:
-                        print(f"          ✗ Setting '{setting_id}' missing <level> element (Kodi 21 nested format)")
+                    if level_elem is not None:
+                        print(f"          ✗ Setting '{setting_id}' has deprecated <level> nested element")
+                        print(f"             Use flat attributes instead")
                         return False
-                    print(f"          ✓ Has <level>{level_elem.text}</level>")
+                    print(f"          ✓ No deprecated <level> element")
                     
-                    # Check for <default> element
                     default_elem = setting.find('default')
-                    if default_elem is None:
-                        print(f"          ✗ Setting '{setting_id}' missing <default> element (Kodi 21 nested format)")
+                    if default_elem is not None:
+                        print(f"          ✗ Setting '{setting_id}' has deprecated <default> nested element")
+                        print(f"             Use default=\"...\" attribute instead")
                         return False
-                    default_text = default_elem.text if default_elem.text else ""
-                    print(f"          ✓ Has <default>{default_text}</default>")
+                    print(f"          ✓ No deprecated <default> element")
                     
-                    # Check for <control> element
                     control_elem = setting.find('control')
-                    if control_elem is None:
-                        print(f"          ✗ Setting '{setting_id}' missing <control> element (Kodi 21 nested format)")
+                    if control_elem is not None:
+                        print(f"          ✗ Setting '{setting_id}' has deprecated <control> nested element")
+                        print(f"             Use flat attributes instead")
                         return False
-                    control_type = control_elem.get('type')
-                    control_format = control_elem.get('format')
-                    print(f"          ✓ Has <control type=\"{control_type}\" format=\"{control_format}\">")
+                    print(f"          ✓ No deprecated <control> element")
                     
-                    # Check for <heading> element inside control
-                    heading_elem = control_elem.find('heading')
-                    if heading_elem is None:
-                        print(f"          ✗ Control for '{setting_id}' missing <heading> element")
+                    # Check 8: For text input, type should be "text" not "string"
+                    if setting_type not in ['text', 'boolean', 'number', 'slider', 'action']:
+                        print(f"          ! Warning: Setting type '{setting_type}' may not be valid")
+                        print(f"             For text input, use type=\"text\"")
+                    
+                    # Check 9: Should have default attribute
+                    if setting_default is None:
+                        print(f"          ✗ Setting '{setting_id}' missing default attribute")
                         return False
-                    print(f"            ✓ Has <heading>{heading_elem.text}</heading>")
+                    print(f"          ✓ Has default=\"{setting_default}\" attribute")
         
         print()
         print("✓ All format requirements met!")
-        print("✓ Settings use Kodi 21 nested element format!")
+        print("✓ Settings use Kodi 21 Omega flat attribute format!")
         return True
         
     except ET.ParseError as e:
