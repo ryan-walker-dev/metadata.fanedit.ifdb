@@ -5,14 +5,14 @@
             <group id="1" label="30005">
                 <setting id="api_key" type="string" label="30001" help="30003">
                     <level>0</level>
-                    <default/>
+                    <default></default>
                     <control type="edit" format="string">
                         <heading>30001</heading>
                     </control>
                 </setting>
                 <setting id="search_engine_id" type="string" label="30002" help="30004">
                     <level>0</level>
-                    <default/>
+                    <default></default>
                     <control type="edit" format="string">
                         <heading>30002</heading>
                     </control>
