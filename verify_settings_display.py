@@ -87,8 +87,12 @@ def verify_settings_display(settings_file='resources/settings.xml', strings_file
         # Summary
         print("Summary:")
         print(f"  ✓ Format Version: {version} (Kodi 21 Omega compatible)")
-        print(f"  ✓ Uses flat attributes (id, type, label, help, default)")
-        print(f"  ✓ No deprecated nested elements")
+        if version == '2':
+            print(f"  ✓ Uses flat attributes (id, type, label, help, default)")
+            print(f"  ✓ No deprecated nested elements")
+        else:
+            print(f"  ✓ Uses nested elements (<level>, <default>, <control>)")
+            print(f"  ✓ Standard format for metadata scrapers")
         
         settings_count = len(root.findall('.//setting'))
         print(f"  ✓ Total settings: {settings_count}")

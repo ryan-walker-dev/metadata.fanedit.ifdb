@@ -116,11 +116,22 @@ def test_settings_format(settings_file='resources/settings.xml'):
                     if setting_type not in VALID_SETTING_TYPES:
                         print(f"          ! Warning: Setting type '{setting_type}' may not be valid")
                     
-                    # Check 9: Should have default attribute
-                    if setting_default is None:
-                        print(f"          ✗ Setting '{setting_id}' missing default attribute")
-                        return False
-                    print(f"          ✓ Has default=\"{setting_default}\" attribute")
+                    # Check 9: Should have default (attribute for v2, element for v1)
+                    if version == '2':
+                        if setting_default is None:
+                            print(f"          ✗ Setting '{setting_id}' missing default attribute")
+                            return False
+                        print(f"          ✓ Has default=\"{setting_default}\" attribute")
+                    else:  # version 1
+                        # For version 1, default can be either an attribute or a nested element
+                        default_elem = setting.find('default')
+                        if setting_default is None and default_elem is None:
+                            print(f"          ✗ Setting '{setting_id}' missing default (attribute or element)")
+                            return False
+                        if default_elem is not None:
+                            print(f"          ✓ Has <default> element")
+                        else:
+                            print(f"          ✓ Has default=\"{setting_default}\" attribute")
         
         print()
         print("✓ All format requirements met!")

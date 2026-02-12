@@ -1,5 +1,41 @@
 # Changelog
 
+## Version 2.0.6 - Settings Page Fix (2026-02-12)
+
+### Bug Fix
+
+**Problem:** Version 2.0.5 caused the settings page to show "No categories available" in Kodi 21 Omega. Users were unable to configure API credentials.
+
+**Root Cause:** PR #20 incorrectly migrated settings.xml from version="1" with nested elements to version="2" with flat attributes. However, Kodi 21 metadata scrapers should use version="1" format with nested elements (`<level>`, `<default>`, `<control>`), not version="2" with flat attributes. The official TheMovieDB Python scraper and other working Kodi 21 scrapers all use version="1" with nested elements.
+
+**Fix:** Reverted settings.xml back to version="1" format with properly structured nested elements:
+
+```xml
+<settings version="1">
+    <section id="metadata.fanedit.ifdb">
+        <category id="api_settings" label="30000">
+            <group id="1" label="30005">
+                <setting id="api_key" type="string" label="30001" help="30003">
+                    <level>0</level>
+                    <default></default>
+                    <control type="edit" format="string">
+                        <heading>30001</heading>
+                    </control>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>
+```
+
+**Files Modified:**
+- `resources/settings.xml`: Reverted to version="1" format with nested elements
+- `addon.xml`: Version bump to 2.0.6
+
+**Reference:** The official Kodi metadata.themoviedb.org.python scraper uses this same version="1" format: https://github.com/xbmc/metadata.themoviedb.org.python/blob/master/resources/settings.xml
+
+---
+
 ## Version 2.0.5 - Settings Format Update for Kodi 21 (2026-02-12)
 
 ### Enhancement
