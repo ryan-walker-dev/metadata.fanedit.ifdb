@@ -27,3 +27,11 @@ msgstr "Google API Key"
 msgctxt "Addon Settings"
 msgid "30002"
 msgstr "Custom Search Engine ID"
+
+msgctxt "Addon Settings"
+msgid "30003"
+msgstr "Enter your Google Custom Search API key"
+
+msgctxt "Addon Settings"
+msgid "30004"
+msgstr "Enter your Google Custom Search Engine ID"
