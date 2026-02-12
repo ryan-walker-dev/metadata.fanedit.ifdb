@@ -1,5 +1,32 @@
 # Changelog
 
+## Version 2.0.2 - Settings Format Fix (2026-02-12)
+
+### Bug Fix
+
+**Problem:** Settings page still showing errors in Kodi 21.3 (Omega):
+```
+error <CSettingString>: error reading the default value of "api_key"
+error <CSettingString>: error reading the default value of "search_engine_id"
+```
+
+**Root Cause:** Kodi 21 Omega requires simplified settings format for text input fields. The previous version used:
+- `type="string"` (incorrect for text input in Kodi 21)
+- Complex nested structure with `<level>`, `<default>`, and `<control>` as child elements (deprecated format)
+
+**Fix:** Simplified settings.xml to use the correct Kodi 21 Omega format:
+- Changed `type="string"` to `type="text"` for text input fields
+- Removed nested child elements (`<level>`, `<default>`, `<control>`)
+- Used flat attribute format: `<setting id="..." type="text" label="..." help="..." default=""/>`
+
+**Files Modified:**
+- `resources/settings.xml`: Simplified entire structure (lines 6-7)
+- `addon.xml`: Version bump to 2.0.2
+
+**Reference:** Kodi Wiki Add-on Settings documentation confirms that `type="text"` is correct for string input fields, not `type="string"` which is for dropdown lists.
+
+---
+
 ## Version 2.0.1 - Settings Page Fix (2026-02-12)
 
 ### Bug Fix
