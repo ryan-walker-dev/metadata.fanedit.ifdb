@@ -137,7 +137,8 @@ def get_details(url, handle):
     try:
         # Fetch page content
         req = urllib.request.Request(url)
-        req.add_header('User-Agent', 'Kodi/21.0 ( https://kodi.tv )')
+        # Use generic User-Agent that works across Kodi versions
+        req.add_header('User-Agent', 'Kodi ( https://kodi.tv )')
         
         with urllib.request.urlopen(req, timeout=30) as response:
             html = response.read().decode('utf-8')
@@ -219,7 +220,8 @@ def get_details(url, handle):
         )
         if votes_match:
             votes = int(votes_match.group(1))
-            # Store votes in userrating or another appropriate field
+            # Note: Kodi's InfoTagVideo doesn't have a dedicated votes field for user ratings
+            # The rating is stored above with setRating() which is the primary metadata
             log(f"Votes: {votes}", xbmc.LOGDEBUG)
         
         # Extract tagline
