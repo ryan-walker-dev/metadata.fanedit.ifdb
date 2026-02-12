@@ -3,12 +3,8 @@
     <section id="metadata.fanedit.ifdb">
         <category id="api_settings" label="30000">
             <group id="1" label="30005">
-                <setting id="api_key" type="text" label="30001" help="30003" default="">
-                    <level>0</level>
-                </setting>
-                <setting id="search_engine_id" type="text" label="30002" help="30004" default="">
-                    <level>0</level>
-                </setting>
+                <setting id="api_key" type="text" label="30001" help="30003" default="" level="0" />
+                <setting id="search_engine_id" type="text" label="30002" help="30004" default="" level="0" />
             </group>
         </category>
     </section>
