@@ -10,7 +10,7 @@ import os
 
 def validate_settings():
     """Validate settings.xml structure and references"""
-    print("="  * 70)
+    print("=" * 70)
     print("IFDB Scraper - Comprehensive Settings Validation")
     print("=" * 70)
     print()
