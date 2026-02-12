@@ -1,12 +1,12 @@
 # Addon Metadata
-msgctxt "#30000"
-msgid "API Settings"
-msgstr ""
+msgctxt "Addon Settings"
+msgid "30000"
+msgstr "API Settings"
 
-msgctxt "#30001"
-msgid "Google API Key"
-msgstr ""
+msgctxt "Addon Settings"
+msgid "30001"
+msgstr "Google API Key"
 
-msgctxt "#30002"
-msgid "Custom Search Engine ID"
-msgstr ""
+msgctxt "Addon Settings"
+msgid "30002"
+msgstr "Custom Search Engine ID"
