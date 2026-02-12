@@ -2,7 +2,7 @@
 <scraper framework="1.1" date="2015-01-30" content="movies">
 
   <CreateSearchUrl clearbuffers="no" dest="3">
-    <RegExp input="$$1" output="&lt;url&gt;https://fanedit.org/fanedit-search/search-results/?query=all&scope=title&keywords=\1&order=alpha&lt;/url&gt;" dest="3">
+    <RegExp input="$$1" output="&lt;url&gt;https://www.google.com/search?hl=en&amp;as_q=\1&amp;as_sitesearch=https://fanedit.org/&lt;/url&gt;" dest="3">
       <expression noclean="1" />
     </RegExp>
   </CreateSearchUrl>
@@ -17,8 +17,8 @@
     <RegExp input="$$5" output="&lt;results&gt;\1&lt;/results&gt;" dest="8">
 
       <!--Normal Search-->
-      <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;https:\/\/fanedit.org\1&lt;/url&gt;&lt;/entity&gt;" dest="5">
-        <expression noclean="1" repeat="yes" >&lt;a href=&quot;(\/[^&quot;]+\/)&quot;[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;</expression>
+      <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;\1&lt;/url&gt;&lt;/entity&gt;" dest="5">
+        <expression noclean="1" repeat="yes" >&lt;a href=&quot;(https://fanedit\.org/[^&quot;]+/)&quot;[^&gt;]*&gt;.*?&lt;h3[^&gt;]*&gt;([^&lt;]+)&lt;/h3&gt;</expression>
       </RegExp>
 
       <!--For if we get a direct match and redirected straight to movie page-->
@@ -46,20 +46,20 @@
 
       <!--Plot-->
       <RegExp input="$$1" output="&lt;plot&gt;\1&lt;/plot&gt;" dest="2">
-        <expression fixchars="1" trim="1">&lt;section[^&gt;]*&gt;[\s]*&lt;h2[^&gt;]*&gt;Synopsis&lt;\/h2&gt;[\s]*&lt;p[^&gt;]*&gt;(.*?)&lt;\/p&gt;</expression>
+        <expression fixchars="1" trim="1">&lt;div class=&quot;jrBriefsynopsis jrFieldRow&quot;&gt;[\s\S]*?&lt;div class=&quot;jrFieldValue&quot;&gt;(.*?)&lt;\/div&gt;</expression>
       </RegExp>
 
       <!--Genres-->
       <RegExp input="$$5" output="&lt;genre&gt;\1&lt;/genre&gt;" dest="2+">
         <RegExp input="$$1" output="\1" dest="5">
-          <expression noclean="1">&lt;li&gt;&lt;strong&gt;Genre:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
+          <expression noclean="1">&lt;div class=&quot;jrGenre jrFieldRow&quot;&gt;[\s\S]*?&lt;ul class=&quot;jrFieldValueList&quot;&gt;(.*?)&lt;\/ul&gt;</expression>
         </RegExp>
-        <expression noclean="1" repeat="yes">([A-Za-z\s\-/]+)(?:,|$)</expression>
+        <expression noclean="1" repeat="yes">&lt;li&gt;&lt;a[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;&lt;\/li&gt;</expression>
       </RegExp>
 
       <!--Genre-->
       <RegExp input="$$1" output="&lt;genre&gt;\1&lt;/genre&gt;" dest="2+">
-        <expression noclean="1">&lt;li&gt;&lt;strong&gt;Genre:&lt;\/strong&gt;[\s]*([^&lt;,]+)</expression>
+        <expression noclean="1">&lt;div class=&quot;jrGenre jrFieldRow&quot;&gt;[\s\S]*?&lt;li&gt;&lt;a[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;&lt;\/li&gt;</expression>
       </RegExp>
 
       <!--Votes-->
@@ -74,7 +74,7 @@
 
       <!--Thumbnail-->
       <RegExp input="$$1" output="&lt;thumb&gt;\1&lt;/thumb&gt;" dest="2+">
-        <expression noclean="1">&lt;img[^&gt;]*class=&quot;[^&quot;]*wp-post-image[^&quot;]*&quot;[^&gt;]*src=&quot;([^&quot;]+)&quot;</expression>
+        <expression noclean="1">&lt;div class=&quot;jrListingMainImage&quot;&gt;[\s\S]*?&lt;a href=&quot;([^&quot;]+)&quot;[^&gt;]*class=&quot;fancybox&quot;</expression>
       </RegExp>
 
       <!--Tagline-->
@@ -85,19 +85,19 @@
       <!--Directors-->
       <RegExp input="$$5" output="&lt;director&gt;\1&lt;/director&gt;" dest="2+">
         <RegExp input="$$1" output="\1" dest="5">
-          <expression noclean="1">&lt;li&gt;&lt;strong&gt;Faneditor Name:&lt;\/strong&gt;[\s]*([^&lt;]+)&lt;\/li&gt;</expression>
+          <expression noclean="1">&lt;div class=&quot;jrFaneditorname jrFieldRow&quot;&gt;[\s\S]*?&lt;ul class=&quot;jrFieldValueList&quot;&gt;(.*?)&lt;\/ul&gt;</expression>
         </RegExp>
-        <expression noclean="1" repeat="yes">([A-Za-z0-9\s\-'&apos;]+)(?:,|$)</expression>
+        <expression noclean="1" repeat="yes">&lt;li&gt;&lt;a[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;&lt;\/li&gt;</expression>
       </RegExp>
 
       <!--Director-->
       <RegExp input="$$1" output="&lt;director&gt;\1&lt;/director&gt;" dest="2+">
-        <expression noclean="1">&lt;li&gt;&lt;strong&gt;Faneditor Name:&lt;\/strong&gt;[\s]*([^&lt;,]+)</expression>
+        <expression noclean="1">&lt;div class=&quot;jrFaneditorname jrFieldRow&quot;&gt;[\s\S]*?&lt;ul class=&quot;jrFieldValueList&quot;&gt;[\s\S]*?&lt;li&gt;&lt;a[^&gt;]*&gt;([^&lt;]+)&lt;\/a&gt;&lt;\/li&gt;</expression>
       </RegExp>
 
       <!--Year-->
       <RegExp input="$$1" output="&lt;year&gt;\1&lt;/year&gt;" dest="2+">
-        <expression noclean="1">&lt;li&gt;&lt;strong&gt;Fanedit Release Date:&lt;\/strong&gt;[\s]*[A-Za-z]*[\s]*([0-9]{4})</expression>
+        <expression noclean="1">&lt;div class=&quot;jrFaneditreleasedate jrFieldRow&quot;&gt;[\s\S]*?&lt;div class=&quot;jrFieldValue&quot;&gt;[\s\S]*?([0-9]{4})</expression>
       </RegExp>
 
       <!--Title-->
