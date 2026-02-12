@@ -1,18 +1,26 @@
 # metadata.fanedit.ifdb
 Kodi Movie Information Scraper for the Internet Fanedit Database using Google Custom Search API
 
-**Current Version: 2.0.0** - Converted to Python scraper for full Kodi 21+ compatibility
+**Current Version: 2.0.3** - Fixed settings page display issue in Kodi 21
 
 Metadata agent for scraping information from the Internet Fanedit Database (IFDB) at https://fanedit.org/
 
-## Recent Updates (v2.0.0)
+## Recent Updates
 
+### v2.0.3 (2026-02-12)
+- ✅ **Fixed settings page display** - Settings now show correctly in Kodi 21.3
+- ✅ Corrected setting type format (`type="string"` with nested elements)
+- ✅ Matches official Kodi scraper standards (TheMovieDB format)
+- ✅ Added comprehensive validation tools
+
+### v2.0.0
 - ✅ **Converted from XML to Python scraper** - Required for Kodi 21 Omega compatibility
 - ✅ Settings page now works properly in Kodi 21+
 - ✅ Full support for modern Kodi versions (21 Omega and later)
 - ✅ Improved error handling and user feedback
 - ✅ Uses Python 3 for better reliability and maintainability
 
+See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 See [TESTING.md](TESTING.md) for detailed testing instructions and troubleshooting.
 
 ## Features
@@ -73,9 +81,36 @@ After installing the addon in Kodi:
 
 ## Troubleshooting
 
-If you experience issues:
+### Settings Page Issues
 
-1. **Settings page is not showing (Kodi 21+)**: 
+#### "Settings page is empty" or shows errors like "unknown setting type 'text'"
+
+**Solution:**
+1. **Ensure you're running version 2.0.3 or later** - Check in Kodi's addon information
+2. **Completely restart Kodi** (not just reload skin) - Settings are cached
+3. **Clear addon data** if restart doesn't work:
+   - Uninstall the addon
+   - Delete addon data folder (varies by platform)
+   - Reinstall the addon
+4. **Verify installation** - Run validation script:
+   ```bash
+   python3 validate_settings.py
+   ```
+   This will check if settings.xml is properly formatted
+
+**Why this happens:**
+- Versions before 2.0.3 had incorrect settings format
+- Kodi caches settings definitions and may not reload them properly
+- The error "unknown setting type 'text'" indicates an old cached version
+
+**Current correct format** (v2.0.3):
+- Uses `type="string"` (NOT `type="text"`)
+- Uses nested XML elements (matches TheMovieDB scraper)
+- All validation tests pass
+
+If you experience other issues:
+
+1. **Settings page is not showing at all (Kodi 21+)**: 
    - Update to version 2.0.0 or later, which uses a Python scraper required by Kodi 21
    - Older XML-based versions (1.x) are not fully compatible with Kodi 21
    
