@@ -1,17 +1,17 @@
 # metadata.fanedit.ifdb
 Kodi Movie Information Scraper for the Internet Fanedit Database using Google Custom Search API
 
-**Current Version: 1.2.2** - Settings page fixed, improved compatibility with Kodi 17+
+**Current Version: 1.2.2** - Settings page fixed for Kodi 21+ compatibility
 
 Metadata agent for scraping information from the Internet Fanedit Database (IFDB) at https://fanedit.org/
 
 ## Recent Updates (v1.2.2)
 
-- ✅ Fixed blank settings page issue
-- ✅ Updated settings format for better Kodi compatibility (17+)
-- ✅ Added proper language file headers
-- ✅ Removed XML parsing issues
-- ✅ Improved error handling
+- ✅ Fixed blank settings page issue for Kodi 21+
+- ✅ Updated settings format to version 1 (Kodi 19+ requirement)
+- ✅ Added proper section/category/group structure for settings
+- ✅ Added help text for settings fields
+- ✅ Improved compatibility with modern Kodi versions (21 Omega tested)
 
 See [TESTING.md](TESTING.md) for detailed testing instructions and troubleshooting.
 
@@ -65,7 +65,10 @@ After installing the addon in Kodi:
 - If you need more, you may need to enable billing on your Google Cloud project
 
 ## Requirements
-- Kodi 17+ (Krypton or later)
+- Kodi 19+ (Matrix or later) - **Required for settings to display correctly**
+  - Kodi 21 (Omega) - Fully supported and tested
+  - Kodi 19/20 (Matrix/Nexus) - Compatible with new settings format
+  - Kodi 17/18 (Krypton/Leia) - Not supported (uses old settings format)
 - Internet connection
 - Google Custom Search API credentials (see Configuration section)
 
@@ -73,8 +76,12 @@ After installing the addon in Kodi:
 
 If you experience issues:
 
-1. **Settings page is blank**: Make sure you're using Kodi 17 or later. See [TESTING.md](TESTING.md) for detailed troubleshooting.
+1. **Settings page is blank**: 
+   - **Kodi 21/20/19 users**: This has been fixed in version 1.2.2. Update to the latest version.
+   - **Kodi 17/18 users**: These versions use the old settings format and are no longer supported. Please upgrade to Kodi 19 or later.
+   
 2. **Connection errors**: Verify your API credentials are correct and you haven't exceeded the 100 queries/day limit.
+
 3. **No search results**: Check that your Custom Search Engine is configured for `fanedit.org/*` only.
 
 For detailed testing and troubleshooting instructions, see [TESTING.md](TESTING.md).

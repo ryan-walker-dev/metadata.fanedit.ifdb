@@ -5,10 +5,10 @@ This guide will help you verify that the IFDB scraper is working correctly after
 ## What Was Fixed
 
 ### Version 1.2.2 Changes:
-1. **Settings page format fixed** - Updated from old format to compatible format that works with Kodi 17+
-2. **Proper strings.po header added** - Added required gettext header for proper localization
-3. **BOM removed from ifdb.xml** - Removed Byte Order Mark that could cause XML parsing issues
-4. **Settings type corrected** - Changed from "string" to "text" for proper input fields
+1. **Settings page format fixed for Kodi 21+** - Updated to settings version 1 format with proper section/category/group structure (required for Kodi 19+)
+2. **Added help text** - Settings now show helpful descriptions for API key and Search Engine ID fields
+3. **Improved Kodi 21 Omega compatibility** - Settings now display correctly on modern Kodi versions
+4. **Note**: This version requires Kodi 19 or later. Kodi 17/18 are no longer supported due to the settings format change.
 
 ## Step-by-Step Testing Instructions
 
@@ -33,12 +33,14 @@ This guide will help you verify that the IFDB scraper is working correctly after
 
 **Expected Result:**
 - Settings dialog should open (not blank)
-- You should see two text input fields:
-  - "Google API Key"
-  - "Custom Search Engine ID"
+- You should see a category labeled "API Settings"
+- Inside, you should see two text input fields with help text:
+  - "Google API Key" (with description: "Enter your Google Custom Search API key")
+  - "Custom Search Engine ID" (with description: "Enter your Google Custom Search Engine ID")
 
 **If settings page is still blank:**
-- Check Kodi version (should be 17 or higher)
+- Check Kodi version (must be 19 or higher for new settings format)
+- Kodi 17/18 are no longer supported - please upgrade to Kodi 19+
 - Check Kodi log file for errors (see Troubleshooting section below)
 
 ### Step 3: Configure API Credentials
@@ -93,7 +95,23 @@ You need Google Custom Search API credentials. If you don't have them yet:
 - Poster image should appear
 - Additional metadata (genre, faneditor, year) should populate
 
-## Using the Test Script
+## Using the Test Scripts
+
+### Testing Settings Format (test_settings_format.py)
+
+To verify that your settings.xml is correctly formatted for Kodi 21:
+
+```bash
+python3 test_settings_format.py
+```
+
+The script will:
+- Verify settings.xml has version="1" attribute
+- Check for proper section/category/group structure
+- Validate all required elements are present
+- Show you the structure of your settings
+
+### Testing API Connection (test_api_connection.py)
 
 If you're having connection issues, you can test the API connection directly:
 
@@ -112,16 +130,21 @@ The script will:
 ### Settings Page is Blank
 
 **Possible Causes:**
-1. Kodi version too old (need 17+)
-2. Language file not found
-3. Corrupted installation
+1. Kodi version too old (need 19+, Kodi 17/18 no longer supported)
+2. Incompatible settings format
+3. Language file not found
+4. Corrupted installation
 
 **Solutions:**
 - Check Kodi version: **Settings** → **System** → **System Information**
+  - **Kodi 21 (Omega)**: Fully supported ✅
+  - **Kodi 19/20 (Matrix/Nexus)**: Supported ✅
+  - **Kodi 17/18 (Krypton/Leia)**: Not supported - please upgrade ❌
 - Verify all files are present, especially:
-  - `resources/settings.xml`
+  - `resources/settings.xml` (should have version="1")
   - `resources/language/resource.language.en_gb/strings.po`
 - Try clean reinstall (uninstall, delete folder, reinstall)
+- Run `test_settings_format.py` to verify settings.xml structure
 
 ### Connection Errors
 
