@@ -83,9 +83,42 @@ def test_settings_format(settings_file='resources/settings.xml'):
                     setting_type = setting.get('type')
                     setting_label = setting.get('label')
                     print(f"        - {setting_id}: type=\"{setting_type}\", label=\"{setting_label}\"")
+                    
+                    # Check 7: For Kodi 21, settings should have nested elements
+                    # Check for <level> element
+                    level_elem = setting.find('level')
+                    if level_elem is None:
+                        print(f"          ✗ Setting '{setting_id}' missing <level> element (Kodi 21 nested format)")
+                        return False
+                    print(f"          ✓ Has <level>{level_elem.text}</level>")
+                    
+                    # Check for <default> element
+                    default_elem = setting.find('default')
+                    if default_elem is None:
+                        print(f"          ✗ Setting '{setting_id}' missing <default> element (Kodi 21 nested format)")
+                        return False
+                    default_text = default_elem.text if default_elem.text else ""
+                    print(f"          ✓ Has <default>{default_text}</default>")
+                    
+                    # Check for <control> element
+                    control_elem = setting.find('control')
+                    if control_elem is None:
+                        print(f"          ✗ Setting '{setting_id}' missing <control> element (Kodi 21 nested format)")
+                        return False
+                    control_type = control_elem.get('type')
+                    control_format = control_elem.get('format')
+                    print(f"          ✓ Has <control type=\"{control_type}\" format=\"{control_format}\">")
+                    
+                    # Check for <heading> element inside control
+                    heading_elem = control_elem.find('heading')
+                    if heading_elem is None:
+                        print(f"          ✗ Control for '{setting_id}' missing <heading> element")
+                        return False
+                    print(f"            ✓ Has <heading>{heading_elem.text}</heading>")
         
         print()
         print("✓ All format requirements met!")
+        print("✓ Settings use Kodi 21 nested element format!")
         return True
         
     except ET.ParseError as e:
