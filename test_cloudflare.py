@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script to verify if fanedit.org (protected by Cloudflare) allows Kodi scraper access.
+Test script to verify if the Google Custom Search API and fanedit.org allow Kodi scraper access.
 
 IMPORTANT: You don't control fanedit.org's Cloudflare settings. This script just
 checks if their current configuration allows the IFDB scraper to work.
@@ -11,38 +11,55 @@ import urllib.error
 import sys
 
 def test_google_search(query="Mr White Part II"):
-    """Test if Google search returns fanedit.org results"""
+    """Test if Google Custom Search API returns fanedit.org results"""
     print("=" * 70)
-    print("TEST 1: Google Search Stage")
+    print("TEST 1: Google Custom Search API Stage")
     print("=" * 70)
     
-    url = f"https://www.google.com/search?hl=en&as_q={query.replace(' ', '+')}&as_sitesearch=https://fanedit.org/"
+    # Use the Google Custom Search API
+    api_key = "AIzaSyBRb-5t6x4X7IAlSl1WishLV6XS5lZclR4"
+    search_engine_id = "c4204d1b86cc34a32"
+    url = f"https://www.googleapis.com/customsearch/v1?key={api_key}&cx={search_engine_id}&q={query.replace(' ', '+')}"
     print(f"URL: {url}")
     
     try:
         headers = {'User-Agent': 'Kodi/19.0'}
         req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=15) as response:
-            html = response.read().decode('utf-8', errors='ignore')
+            import json
+            data = json.loads(response.read().decode('utf-8'))
             
-            # Check for fanedit.org URLs
-            if 'fanedit.org' in html:
-                print("✅ SUCCESS: Google search returns fanedit.org results")
+            # Check if we have items in the response
+            if 'items' in data:
+                print("✅ SUCCESS: Google Custom Search API returns results")
                 
-                # Try to extract some URLs
-                import re
-                urls = re.findall(r'https://fanedit\.org/[^/"]+/', html)
-                if urls:
-                    print(f"   Found {len(set(urls))} unique fanedit.org URLs")
-                    for i, url in enumerate(list(set(urls))[:3], 1):
-                        print(f"   {i}. {url}")
-                return True
+                # Extract fanedit.org URLs
+                fanedit_urls = [item['link'] for item in data['items'] if 'fanedit.org' in item.get('link', '')]
+                
+                if fanedit_urls:
+                    print(f"   Found {len(fanedit_urls)} fanedit.org URLs")
+                    for i, url in enumerate(fanedit_urls[:3], 1):
+                        title = data['items'][i-1].get('title', 'N/A')
+                        print(f"   {i}. {title}")
+                        print(f"      {url}")
+                    return True
+                else:
+                    print("⚠️  WARNING: No fanedit.org results found in API response")
+                    return False
             else:
-                print("⚠️  WARNING: No fanedit.org results found")
+                print("⚠️  WARNING: No items in API response")
+                if 'error' in data:
+                    print(f"   API Error: {data['error'].get('message', 'Unknown error')}")
                 return False
                 
     except urllib.error.HTTPError as e:
         print(f"❌ FAILED: HTTP Error {e.code}")
+        try:
+            error_data = json.loads(e.read().decode('utf-8'))
+            if 'error' in error_data:
+                print(f"   API Error: {error_data['error'].get('message', 'Unknown error')}")
+        except:
+            pass
         return False
     except Exception as e:
         print(f"❌ FAILED: {e}")
@@ -156,10 +173,11 @@ def main():
     import datetime
     
     print("\n" + "=" * 70)
-    print("IFDB SCRAPER - CLOUDFLARE COMPATIBILITY TEST")
+    print("IFDB SCRAPER - GOOGLE CUSTOM SEARCH API & CLOUDFLARE TEST")
     print("=" * 70)
     print(f"Test Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("\nThis script tests if the IFDB scraper can access fanedit.org")
+    print("\nThis script tests if the IFDB scraper can access Google Custom Search")
+    print("API and fanedit.org")
     print("NOTE: You don't control fanedit.org's Cloudflare - this just")
     print("      checks if their current configuration allows Kodi.\n")
     
@@ -172,7 +190,7 @@ def main():
     print("\n" + "=" * 70)
     print("SUMMARY")
     print("=" * 70)
-    print(f"1. Google Search:      {'✅ PASS' if test1 else '❌ FAIL'}")
+    print(f"1. Custom Search API:  {'✅ PASS' if test1 else '❌ FAIL'}")
     print(f"2. Detail Page Access: {'✅ PASS' if test2 else '❌ FAIL'}")
     print(f"3. Pattern Matching:   {'✅ PASS' if test3 else '⚠️  SKIP' if not test2 else '❌ FAIL'}")
     
@@ -180,19 +198,19 @@ def main():
     if test1 and test2 and test3:
         print("✅ SCRAPER FULLY TESTED AND WORKING")
         print("\nAll tests passed! The scraper can:")
-        print("- Find fanedits via Google search")
+        print("- Find fanedits via Google Custom Search API")
         print("- Access fanedit.org detail pages")
         print("- Extract metadata using all regex patterns")
         print("\nYou should be able to use this scraper in Kodi successfully!")
     elif test1 and test2:
         print("✅ SCRAPER SHOULD WORK")
-        print("\nThe scraper can access fanedit.org successfully!")
-        print("Google search and detail page access are both working.")
+        print("\nThe scraper can access Google Custom Search API and fanedit.org!")
+        print("Custom Search API and detail page access are both working.")
         print("Pattern matching test had issues, but the scraper should still work.")
         print("\nYou should be able to use this scraper in Kodi.")
     elif test1 and not test2:
         print("⚠️  SCRAPER WILL NOT WORK")
-        print("\nGoogle search works, but fanedit.org is blocking detail pages.")
+        print("\nGoogle Custom Search API works, but fanedit.org is blocking detail pages.")
         print("This is likely due to Cloudflare protecting the site.")
         print("\n⚠️  IMPORTANT: You don't control fanedit.org's Cloudflare!")
         print("\nYOUR OPTIONS:")
@@ -207,8 +225,9 @@ def main():
         print("\nUnable to access required resources.")
         print("\nPOSSIBLE CAUSES:")
         print("1. No internet connection")
-        print("2. Google or fanedit.org temporarily unavailable")
+        print("2. Google Custom Search API or fanedit.org temporarily unavailable")
         print("3. Network/firewall blocking requests")
+        print("4. API key quota exceeded (100 queries/day free tier)")
         print("\nTry again later or check your connection.")
     print("=" * 70)
     

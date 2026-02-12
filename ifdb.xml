@@ -2,7 +2,7 @@
 <scraper framework="1.1" date="2015-01-30" content="movies">
 
   <CreateSearchUrl clearbuffers="no" dest="3">
-    <RegExp input="$$1" output="&lt;url&gt;https://www.google.com/search?hl=en&amp;as_q=\1&amp;as_sitesearch=https://fanedit.org/&lt;/url&gt;" dest="3">
+    <RegExp input="$$1" output="&lt;url&gt;https://www.googleapis.com/customsearch/v1?key=AIzaSyBRb-5t6x4X7IAlSl1WishLV6XS5lZclR4&amp;cx=c4204d1b86cc34a32&amp;q=\1&lt;/url&gt;" dest="3">
       <expression noclean="1" />
     </RegExp>
   </CreateSearchUrl>
@@ -16,9 +16,9 @@
   <GetSearchResults dest="8">
     <RegExp input="$$5" output="&lt;results&gt;\1&lt;/results&gt;" dest="8">
 
-      <!--Normal Search-->
-      <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;\1&lt;/url&gt;&lt;/entity&gt;" dest="5">
-        <expression noclean="1" repeat="yes" >&lt;a href=&quot;(https://fanedit\.org/[^&quot;]+/)&quot;[^&gt;]*&gt;.*?&lt;h3[^&gt;]*&gt;([^&lt;]+)&lt;/h3&gt;</expression>
+      <!--Parse JSON results from Google Custom Search API-->
+      <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\1&lt;/title&gt;&lt;url&gt;\2&lt;/url&gt;&lt;/entity&gt;" dest="5">
+        <expression noclean="1" repeat="yes">&quot;title&quot;:\s*&quot;([^&quot;]+)&quot;[\s\S]*?&quot;link&quot;:\s*&quot;(https://fanedit\.org/[^&quot;]+)&quot;</expression>
       </RegExp>
 
       <!--For if we get a direct match and redirected straight to movie page-->
