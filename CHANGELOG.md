@@ -1,5 +1,52 @@
 # Changelog
 
+## Version 2.0.5 - Settings Format Update for Kodi 21 (2026-02-12)
+
+### Enhancement
+
+**Problem:** Settings page not displaying correctly in Kodi 21 Omega. The previous `settings.xml` used version="1" format with deprecated nested elements (`<level>`, `<default>`, `<control>`), which may not be fully compatible with Kodi 21's settings system.
+
+**Root Cause:** Kodi 21 Omega requires modern settings format with flat attributes for proper display. The old version="1" format with nested elements is deprecated and can cause display issues.
+
+**Fix:** Rebuilt `settings.xml` from scratch using version="2" format with flat attributes:
+
+**Before (version="1" with nested elements):**
+```xml
+<settings version="1">
+    <setting id="api_key" type="string" label="30001" help="30003">
+        <level>0</level>
+        <default></default>
+        <control type="edit" format="string">
+            <heading>30001</heading>
+        </control>
+    </setting>
+</settings>
+```
+
+**After (version="2" with flat attributes):**
+```xml
+<settings version="2">
+    <setting id="api_key" type="string" label="30001" help="30003" default=""/>
+</settings>
+```
+
+**Files Modified:**
+- `resources/settings.xml`: Rebuilt with version="2" format using flat attributes
+- `addon.xml`: Version bump to 2.0.5
+- `test_settings_format.py`: Updated to validate both version 1 and version 2 formats
+- `verify_settings_display.py`: New script to verify and display settings structure
+
+**Testing:** All existing tests pass with new format. Settings structure verified with comprehensive display verification.
+
+**Expected Display in Kodi 21:**
+- Category: "API Settings"
+- Group: "Google Custom Search Configuration"
+- Two text input fields with help text:
+  - "Google API Key"
+  - "Custom Search Engine ID"
+
+---
+
 ## Version 2.0.4 - API URL Encoding Fix (2026-02-12)
 
 ### Bug Fix
