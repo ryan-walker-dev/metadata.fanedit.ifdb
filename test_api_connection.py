@@ -8,6 +8,7 @@ import urllib.request
 import urllib.parse
 import json
 import sys
+from urllib.parse import urlparse
 
 def test_api_connection(api_key, search_engine_id, query="The Empire Strikes Back"):
     """Test the Google Custom Search API connection"""
@@ -74,8 +75,16 @@ def test_api_connection(api_key, search_engine_id, query="The Empire Strikes Bac
                         print(f"     {link}")
                         print()
                     
-                    # Check if any results are from fanedit.org
-                    fanedit_results = [item for item in items if 'fanedit.org' in item.get('link', '')]
+                    # Check if any results are from fanedit.org (using proper URL parsing)
+                    fanedit_results = []
+                    for item in items:
+                        link = item.get('link', '')
+                        if link:
+                            parsed = urlparse(link)
+                            # Check if domain is exactly fanedit.org or a subdomain
+                            if parsed.netloc == 'fanedit.org' or parsed.netloc.endswith('.fanedit.org'):
+                                fanedit_results.append(item)
+                    
                     if fanedit_results:
                         print(f"✓ Found {len(fanedit_results)} results from fanedit.org")
                         return True
