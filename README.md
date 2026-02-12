@@ -46,7 +46,7 @@ After installing the addon in Kodi:
 3. In "Sites to search": enter `fanedit.org/*`
 4. Name it (e.g., "Fanedit IFDB Search")
 5. Click "Create"
-6. Copy the **Search Engine ID** (looks like: `c4204d1b86cc34a32`)
+6. Copy the **Search Engine ID** (usually a long alphanumeric string)
 
 #### API Usage Limits
 - Google Custom Search API has a free tier limit of **100 queries per day**
