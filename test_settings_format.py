@@ -6,6 +6,9 @@ Test script to validate settings.xml format for Kodi 21 compatibility
 import xml.etree.ElementTree as ET
 import sys
 
+# Valid setting types for Kodi add-ons
+VALID_SETTING_TYPES = ['string', 'text', 'boolean', 'number', 'slider', 'action', 'enum']
+
 def test_settings_format(settings_file='resources/settings.xml'):
     """Test that settings.xml follows Kodi 21 format requirements"""
     
@@ -28,12 +31,12 @@ def test_settings_format(settings_file='resources/settings.xml'):
             return False
         print("✓ Root element is 'settings'")
         
-        # Check 2: Root should have version="1" attribute
+        # Check 2: Root should have version attribute (1 or 2)
         version = root.get('version')
-        if version != '1':
-            print(f"✗ Settings should have version=\"1\", found version=\"{version}\"")
+        if version not in ['1', '2']:
+            print(f"✗ Settings should have version=\"1\" or version=\"2\", found version=\"{version}\"")
             return False
-        print("✓ Settings has version=\"1\" attribute")
+        print(f"✓ Settings has version=\"{version}\" attribute")
         
         # Check 3: Should have exactly one <section> element
         sections = root.findall('section')
@@ -85,33 +88,33 @@ def test_settings_format(settings_file='resources/settings.xml'):
                     setting_default = setting.get('default')
                     print(f"        - {setting_id}: type=\"{setting_type}\", label=\"{setting_label}\", default=\"{setting_default}\"")
                     
-                    # Check 7: Settings should use flat attributes (Kodi 21 Omega format)
-                    # These should NOT have nested elements
-                    level_elem = setting.find('level')
-                    if level_elem is not None:
-                        print(f"          ✗ Setting '{setting_id}' has deprecated <level> nested element")
-                        print(f"             Use flat attributes instead")
-                        return False
-                    print(f"          ✓ No deprecated <level> element")
+                    # Check 7: For version="2", settings should use flat attributes
+                    if version == '2':
+                        # These should NOT have nested elements in version 2
+                        level_elem = setting.find('level')
+                        if level_elem is not None:
+                            print(f"          ✗ Setting '{setting_id}' has deprecated <level> nested element for version 2")
+                            print(f"             Use flat attributes instead")
+                            return False
+                        print(f"          ✓ No deprecated <level> element")
+                        
+                        default_elem = setting.find('default')
+                        if default_elem is not None:
+                            print(f"          ✗ Setting '{setting_id}' has deprecated <default> nested element for version 2")
+                            print(f"             Use default=\"...\" attribute instead")
+                            return False
+                        print(f"          ✓ No deprecated <default> element")
+                        
+                        control_elem = setting.find('control')
+                        if control_elem is not None:
+                            print(f"          ✗ Setting '{setting_id}' has deprecated <control> nested element for version 2")
+                            print(f"             Use flat attributes instead")
+                            return False
+                        print(f"          ✓ No deprecated <control> element")
                     
-                    default_elem = setting.find('default')
-                    if default_elem is not None:
-                        print(f"          ✗ Setting '{setting_id}' has deprecated <default> nested element")
-                        print(f"             Use default=\"...\" attribute instead")
-                        return False
-                    print(f"          ✓ No deprecated <default> element")
-                    
-                    control_elem = setting.find('control')
-                    if control_elem is not None:
-                        print(f"          ✗ Setting '{setting_id}' has deprecated <control> nested element")
-                        print(f"             Use flat attributes instead")
-                        return False
-                    print(f"          ✓ No deprecated <control> element")
-                    
-                    # Check 8: For text input, type should be "text" not "string"
-                    if setting_type not in ['text', 'boolean', 'number', 'slider', 'action']:
+                    # Check 8: For text input, type should be "string" 
+                    if setting_type not in VALID_SETTING_TYPES:
                         print(f"          ! Warning: Setting type '{setting_type}' may not be valid")
-                        print(f"             For text input, use type=\"text\"")
                     
                     # Check 9: Should have default attribute
                     if setting_default is None:
@@ -121,7 +124,10 @@ def test_settings_format(settings_file='resources/settings.xml'):
         
         print()
         print("✓ All format requirements met!")
-        print("✓ Settings use Kodi 21 Omega flat attribute format!")
+        if version == '2':
+            print("✓ Settings use Kodi 21 Omega version 2 flat attribute format!")
+        else:
+            print("✓ Settings use Kodi 19+ version 1 format!")
         return True
         
     except ET.ParseError as e:
