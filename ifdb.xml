@@ -2,7 +2,7 @@
 <scraper framework="1.1" date="2015-01-30" content="movies">
 
   <CreateSearchUrl clearbuffers="no" dest="3">
-    <RegExp input="$$1" output="&lt;url&gt;https://www.googleapis.com/customsearch/v1?key=$INFO[api_key]&amp;cx=$INFO[search_engine_id]&amp;q=\1&lt;/url&gt;" dest="3">
+    <RegExp input="$$1" output="&lt;url&gt;https://www.googleapis.com/customsearch/v1?key=$SETTING[api_key]&amp;cx=$SETTING[search_engine_id]&amp;q=\1&lt;/url&gt;" dest="3">
       <expression noclean="1" />
     </RegExp>
   </CreateSearchUrl>
