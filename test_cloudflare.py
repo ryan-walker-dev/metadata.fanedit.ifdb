@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-Test script to verify IFDB scraper compatibility with Cloudflare-protected fanedit.org
+Test script to verify if fanedit.org (protected by Cloudflare) allows Kodi scraper access.
+
+IMPORTANT: You don't control fanedit.org's Cloudflare settings. This script just
+checks if their current configuration allows the IFDB scraper to work.
 """
 
 import urllib.request
@@ -152,8 +155,9 @@ def main():
     print("\n" + "=" * 70)
     print("IFDB SCRAPER - CLOUDFLARE COMPATIBILITY TEST")
     print("=" * 70)
-    print("\nThis script tests if the IFDB scraper will work with Cloudflare")
-    print("protection on fanedit.org\n")
+    print("\nThis script tests if the IFDB scraper can access fanedit.org")
+    print("NOTE: You don't control fanedit.org's Cloudflare - this just")
+    print("      checks if their current configuration allows Kodi.\n")
     
     # Run tests
     test1 = test_google_search()
@@ -171,23 +175,29 @@ def main():
     print("\n" + "=" * 70)
     if test1 and test2:
         print("✅ SCRAPER SHOULD WORK")
-        print("\nThe scraper is compatible with your Cloudflare configuration!")
-        print("Both search and detail page access are working correctly.")
+        print("\nThe scraper can access fanedit.org successfully!")
+        print("Both search and detail page access are working.")
+        print("You should be able to use this scraper in Kodi.")
     elif test1 and not test2:
-        print("⚠️  SCRAPER PARTIALLY WORKING")
-        print("\nGoogle search works, but detail pages are blocked by Cloudflare.")
-        print("\nTO FIX:")
-        print("1. Go to Cloudflare Dashboard → Security → WAF")
-        print("2. Create a rule to allow User-Agent containing 'Kodi'")
-        print("3. Or lower Security Level to Low/Medium")
-        print("\nSee CLOUDFLARE_COMPATIBILITY.md for detailed instructions.")
+        print("⚠️  SCRAPER WILL NOT WORK")
+        print("\nGoogle search works, but fanedit.org is blocking detail pages.")
+        print("This is likely due to Cloudflare protecting the site.")
+        print("\n⚠️  IMPORTANT: You don't control fanedit.org's Cloudflare!")
+        print("\nYOUR OPTIONS:")
+        print("1. Contact fanedit.org administrators (if possible)")
+        print("   - Explain that Kodi scrapers are being blocked")
+        print("   - Request they allow 'User-Agent: Kodi/*' in Cloudflare")
+        print("2. Use manual .nfo files for metadata instead")
+        print("3. Check back periodically - they may adjust settings")
+        print("\nSee CLOUDFLARE_COMPATIBILITY.md for more information.")
     else:
-        print("❌ SCRAPER MAY NOT WORK")
-        print("\nThere are issues accessing the required resources.")
-        print("\nTO FIX:")
-        print("1. Check your internet connection")
-        print("2. Verify fanedit.org is accessible")
-        print("3. Check Cloudflare configuration")
+        print("❌ CANNOT TEST PROPERLY")
+        print("\nUnable to access required resources.")
+        print("\nPOSSIBLE CAUSES:")
+        print("1. No internet connection")
+        print("2. Google or fanedit.org temporarily unavailable")
+        print("3. Network/firewall blocking requests")
+        print("\nTry again later or check your connection.")
     print("=" * 70)
     
     return 0 if (test1 and test2) else 1

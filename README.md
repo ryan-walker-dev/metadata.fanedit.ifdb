@@ -14,17 +14,29 @@ Metadata agent for scraping information from the Internet Fanedit Database (IFDB
 3. Scraper will use Google to search and then fetch details from fanedit.org
 
 ## Cloudflare Compatibility
-Since fanedit.org uses Cloudflare protection, the scraper requires proper configuration:
 
-- ✅ **Google Search**: Always works (Google is whitelisted by Cloudflare for SEO)
-- ⚠️ **Detail Pages**: Requires Cloudflare to allow Kodi's User-Agent
+**Important**: fanedit.org is protected by Cloudflare. You don't control their Cloudflare settings, so whether the scraper works depends on how they've configured it.
 
-### If the scraper isn't working:
-1. Verify fanedit.org's Cloudflare is configured to allow `User-Agent: Kodi/*`
-2. Check Cloudflare Security Level is not set to "Under Attack Mode"
-3. Run the included test: `python3 test_cloudflare.py`
+### How it works:
+- ✅ **Google Search**: Always works (Google is whitelisted for SEO)
+- ⚠️ **Detail Pages**: Depends on fanedit.org allowing Kodi's User-Agent
 
-See **[CLOUDFLARE_COMPATIBILITY.md](CLOUDFLARE_COMPATIBILITY.md)** for detailed configuration instructions.
+### Testing:
+```bash
+# Test if scraper can currently access fanedit.org
+python3 test_cloudflare.py
+```
+
+### If the scraper doesn't work:
+1. Run the test script above to confirm it's being blocked
+2. You may need to contact fanedit.org administrators
+3. Alternative: Use manual `.nfo` files for metadata
+
+See **[CLOUDFLARE_COMPATIBILITY.md](CLOUDFLARE_COMPATIBILITY.md)** for detailed information about:
+- Why Cloudflare might block the scraper
+- What you can and cannot do about it
+- How to test and monitor the situation
+- Alternative solutions if blocked
 
 ## Testing
 ```bash
@@ -35,4 +47,9 @@ python3 test_cloudflare.py
 ## Requirements
 - Kodi 17+ (Krypton or later)
 - Internet connection
-- fanedit.org must be accessible (Cloudflare configured to allow Kodi)
+- fanedit.org must allow Kodi User-Agent (you cannot control this - it depends on their Cloudflare configuration)
+
+## Notes
+- This scraper accesses fanedit.org which is not under your control
+- If fanedit.org's Cloudflare blocks Kodi, the scraper cannot work
+- Test with `python3 test_cloudflare.py` to check current access status
