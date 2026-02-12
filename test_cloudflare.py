@@ -111,7 +111,8 @@ def test_pattern_matching(url="https://fanedit.org/mr-white-part-ii-phoenix/"):
         with urllib.request.urlopen(req, timeout=15) as response:
             html = response.read().decode('utf-8', errors='ignore')
             
-            if 'challenge' in html.lower() or len(html) < 1000:
+            # Check for Cloudflare challenge page (be more specific than just "challenge")
+            if ('Cloudflare' in html and 'challenge' in html.lower()) or len(html) < 1000:
                 print("⚠️  SKIPPED: Cannot access page (Cloudflare blocking)")
                 return False
             
@@ -152,9 +153,12 @@ def test_pattern_matching(url="https://fanedit.org/mr-white-part-ii-phoenix/"):
         return False
 
 def main():
+    import datetime
+    
     print("\n" + "=" * 70)
     print("IFDB SCRAPER - CLOUDFLARE COMPATIBILITY TEST")
     print("=" * 70)
+    print(f"Test Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("\nThis script tests if the IFDB scraper can access fanedit.org")
     print("NOTE: You don't control fanedit.org's Cloudflare - this just")
     print("      checks if their current configuration allows Kodi.\n")
@@ -173,11 +177,19 @@ def main():
     print(f"3. Pattern Matching:   {'✅ PASS' if test3 else '⚠️  SKIP' if not test2 else '❌ FAIL'}")
     
     print("\n" + "=" * 70)
-    if test1 and test2:
+    if test1 and test2 and test3:
+        print("✅ SCRAPER FULLY TESTED AND WORKING")
+        print("\nAll tests passed! The scraper can:")
+        print("- Find fanedits via Google search")
+        print("- Access fanedit.org detail pages")
+        print("- Extract metadata using all regex patterns")
+        print("\nYou should be able to use this scraper in Kodi successfully!")
+    elif test1 and test2:
         print("✅ SCRAPER SHOULD WORK")
         print("\nThe scraper can access fanedit.org successfully!")
-        print("Both search and detail page access are working.")
-        print("You should be able to use this scraper in Kodi.")
+        print("Google search and detail page access are both working.")
+        print("Pattern matching test had issues, but the scraper should still work.")
+        print("\nYou should be able to use this scraper in Kodi.")
     elif test1 and not test2:
         print("⚠️  SCRAPER WILL NOT WORK")
         print("\nGoogle search works, but fanedit.org is blocking detail pages.")
