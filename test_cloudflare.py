@@ -27,23 +27,32 @@ def test_google_search(query="Mr White Part II"):
         req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=15) as response:
             import json
+            from urllib.parse import urlparse
             data = json.loads(response.read().decode('utf-8'))
             
             # Check if we have items in the response
             if 'items' in data:
                 print("✅ SUCCESS: Google Custom Search API returns results")
                 
-                # Extract fanedit.org URLs
-                fanedit_urls = [item['link'] for item in data['items'] if 'fanedit.org' in item.get('link', '')]
+                # Extract fanedit.org URLs with proper domain validation
+                fanedit_urls = []
+                for item in data['items']:
+                    link = item.get('link', '')
+                    parsed = urlparse(link)
+                    if parsed.netloc == 'fanedit.org' or parsed.netloc.endswith('.fanedit.org'):
+                        fanedit_urls.append(link)
                 
                 if fanedit_urls:
                     print(f"   Found {len(fanedit_urls)} fanedit.org URLs")
-                    for i, item in enumerate(data['items'][:3], 1):
-                        if 'fanedit.org' in item.get('link', ''):
+                    count = 0
+                    for item in data['items'][:3]:
+                        link = item.get('link', '')
+                        parsed = urlparse(link)
+                        if parsed.netloc == 'fanedit.org' or parsed.netloc.endswith('.fanedit.org'):
+                            count += 1
                             title = item.get('title', 'N/A')
-                            url = item.get('link', '')
-                            print(f"   {i}. {title}")
-                            print(f"      {url}")
+                            print(f"   {count}. {title}")
+                            print(f"      {link}")
                     return True
                 else:
                     print("⚠️  WARNING: No fanedit.org results found in API response")
