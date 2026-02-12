@@ -1,5 +1,26 @@
 # Changelog
 
+## Version 2.0.1 - Settings Page Fix (2026-02-12)
+
+### Bug Fix
+
+**Problem:** Settings page not appearing in Kodi 21.3 (Omega) with error:
+```
+error <CSettingString>: error reading the default value of "api_key"
+error <CSettingString>: error reading the default value of "search_engine_id"
+```
+
+**Root Cause:** Self-closing `<default/>` tags in settings.xml caused Kodi's C++ settings parser to fail when reading string setting default values.
+
+**Fix:** Changed `<default/>` to `<default></default>` for both settings. Even though XML parsers treat these as equivalent, Kodi's settings parser specifically requires the explicit opening/closing tag format.
+
+**Files Modified:**
+- `resources/settings.xml`: Lines 8 and 15
+
+**Verification:** Tested with test_settings_format.py - all tests pass.
+
+---
+
 ## Version 2.0.0 - Python Scraper Conversion (2026-02-12)
 
 ### Major Changes
