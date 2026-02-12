@@ -1,5 +1,5 @@
 # metadata.fanedit.ifdb
-Kodi Movie Information Scraper for the Internet Fanedit Database
+Kodi Movie Information Scraper for the Internet Fanedit Database using a google to search (due to the limitation of IFDB's search)
 
 Metadata agent for scraping information from the Internet Fanedit Database (IFDB) at https://fanedit.org/
 
