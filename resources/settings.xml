@@ -1,7 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
+<?xml version="1.0" encoding="utf-8"?>
+<settings version="2">
     <category label="30000">
-        <setting id="api_key" type="text" label="30001" default="" />
-        <setting id="search_engine_id" type="text" label="30002" default="" />
+        <group id="1" label="30000">
+            <setting id="api_key" type="string" label="30001" default="">
+                <level>0</level>
+                <default></default>
+            </setting>
+            <setting id="search_engine_id" type="string" label="30002" default="">
+                <level>0</level>
+                <default></default>
+            </setting>
+        </group>
     </category>
 </settings>
