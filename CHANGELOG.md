@@ -1,5 +1,61 @@
 # Changelog
 
+## Version 2.0.4 - API URL Encoding Fix (2026-02-12)
+
+### Bug Fix
+
+**Problem:** Users getting "scraper error: API request failed: Bad Request" when trying to use the scraper with valid API credentials.
+
+**Root Cause:** The API URL construction in `ifdb.py` (lines 70-75) was manually concatenating URL parameters without proper URL encoding. When API keys or search engine IDs contain special characters (like `+`, `/`, `=`, `:`, etc.), these characters were not being properly encoded, causing Google's API to return a "400 Bad Request" error.
+
+**Example of the problem:**
+```
+Bad URL:  https://googleapis.com/.../v1?key=AIzaSy-ABC+123&cx=abc-123:def
+Good URL: https://googleapis.com/.../v1?key=AIzaSy-ABC%2B123&cx=abc-123%3Adef
+```
+
+**Fix:** Changed URL construction to use `urllib.parse.urlencode()` which properly encodes all URL parameters:
+
+**Before (lines 66-75):**
+```python
+# URL encode the query
+encoded_query = urllib.parse.quote(search_query)
+
+# Build API URL
+api_url = (
+    f"https://www.googleapis.com/customsearch/v1"
+    f"?key={api_key}"
+    f"&cx={search_engine_id}"
+    f"&q={encoded_query}"
+)
+```
+
+**After:**
+```python
+# Build API URL with proper parameter encoding
+base_url = "https://www.googleapis.com/customsearch/v1"
+params = {
+    'key': api_key,
+    'cx': search_engine_id,
+    'q': search_query
+}
+api_url = f"{base_url}?{urllib.parse.urlencode(params)}"
+```
+
+**Files Modified:**
+- `ifdb.py`: Fixed URL construction in search_movie() function (lines 66-73)
+- `addon.xml`: Version bump to 2.0.4
+- `test_url_encoding.py`: New test to validate URL encoding with special characters
+
+**Testing:** Added comprehensive test (`test_url_encoding.py`) that validates proper encoding of special characters in:
+- API keys with `+`, `/`, `=`, `-`, `_` characters
+- Search engine IDs with `:`, `-`, `_` characters  
+- Search queries with spaces and special characters
+
+**Result:** The scraper now correctly handles API credentials containing any special characters, eliminating the "Bad Request" error.
+
+---
+
 ## Version 2.0.3 - Settings Type Fix (2026-02-12)
 
 ### Bug Fix
