@@ -137,8 +137,9 @@ def get_details(url, handle):
     try:
         # Fetch page content
         req = urllib.request.Request(url)
-        # Use generic User-Agent that works across Kodi versions
-        req.add_header('User-Agent', 'Kodi (https://kodi.tv)')
+        # Include addon version in User-Agent for website admins and debugging
+        addon_version = ADDON.getAddonInfo('version')
+        req.add_header('User-Agent', f'Kodi-IFDB/{addon_version} (https://kodi.tv)')
         
         with urllib.request.urlopen(req, timeout=30) as response:
             html = response.read().decode('utf-8')
